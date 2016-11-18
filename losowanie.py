@@ -12,13 +12,14 @@ from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMix
 import random
 import string
 import sendgrid
+import urllib.request as urllib
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 db = SQLAlchemy(app)
 
-sg = sendgrid.SendGridClient(app.config['SENDGRID_API_KEY'])
+sg = sendgrid.SendGridAPIClient(apikey=app.config['SENDGRID_API_KEY'])
 
 
 roles_users = db.Table('roles_users', db.Column('user_id', db.Integer(), db.ForeignKey('user.id')), db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
@@ -70,14 +71,14 @@ class MemberAdmin(sqla.ModelView):
     def on_model_change(self, form, model, is_created):
         if (is_created):
             model.hash = ''.join(random.SystemRandom().choice(string.ascii_lowercase + string.digits) for _ in range(10))
-            message = sendgrid.Mail()
-            message.add_filter('templates', 'enable', '1')
-            message.add_filter('templates', 'template_id', app.config['SENDGRID_TEMPLATE_ID'])
-            message.set_subject('Zaproszenie do losowania')
-            message.set_html(render_template('email/activation.html', url=url_for('activate', hash=model.hash, _external=True), member=model))
-            message.add_to('%s <%s>' % (model.name, model.email))
-            message.set_from('Kamil Szewczyk <kamil@szewczyk.org>')
-            status, msg = sg.send(message)
+            content = Content("text/html", render_template('email/activation.html', url=url_for('activate', hash=model.hash, _external=True), member=model))
+            message = Mail(Email('kamil@szewczyk.org', 'Kamil Szewczyk'), 'Zaproszenie do losowania', Email(model.email, model.name), content)
+            message.set_template_id(app.config['SENDGRID_TEMPLATE_ID'])
+            try:
+                response = sg.client.mail.send.post(request_body=message.get())
+            except urllib.HTTPError as e:
+                print(e.read())
+                exit()
 
 
 # Setup Flask-Security
