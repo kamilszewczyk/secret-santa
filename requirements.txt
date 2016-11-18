@@ -1,0 +1,6 @@
+Flask
+sendgrid
+Flask-Admin
+Flask-SQLAlchemy
+Flask-Security==1.7.4
+Flask-Login==0.2.11

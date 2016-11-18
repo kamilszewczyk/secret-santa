@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+        <title>{% block title %}{% endblock %}</title>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/app.css') }}">
+    </head>
+
+    <body>
+        <header>
+            <img src="{{ url_for('static', filename='img/top-header.gif') }}" />
+        </header>
+        <div class="container">
+            <img src="{{ url_for('static', filename='img/top-snow.png') }}" />
+            {% block body %}{% endblock %}
+            <img src="{{ url_for('static', filename='img/footer-top-snow.png') }}" />
+        </div>
+        <footer>
+            <img src="{{ url_for('static', filename='img/footer-bottom-snow.png') }}" />
+        </footer>
+    </body>
+</html>
