@@ -12,7 +12,6 @@ from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMix
 import random
 import string
 import sendgrid
-import urllib.request as urllib
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
