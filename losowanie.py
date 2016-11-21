@@ -12,6 +12,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMix
 import random
 import string
 import sendgrid
+from sendgrid.helpers.mail import *
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -64,7 +65,8 @@ class MemberAdmin(sqla.ModelView):
         """
         Override builtin _handle_view in order to redirect users when a view is not accessible.
         """
-        if not current_user.is_authenticated():
+        print(current_user)
+        if not current_user.is_authenticated:
             return redirect(url_for('security.login', next=request.url))
 
     def on_model_change(self, form, model, is_created):
@@ -113,6 +115,19 @@ def activate(hash):
     db.session.commit()
     return render_template('activate.html', member=member)
 
+@app.route("/emailtest")
+def email_test():
+    model  = Member.query.filter(Member.email == 'kamil@szewczyk.org').first()
+    model.pick = Member.query.filter(Member.email == 'gosia@szewczyk.org').first()
+    content = Content("text/html", render_template('email/draw.html', member=model))
+    message = Mail(Email('kamil@szewczyk.org', 'Kamil Szewczyk'), 'Zaproszenie do losowania', Email(model.email, model.name), content)
+    message.set_template_id(app.config['SENDGRID_TEMPLATE_ID'])
+    try:
+        response = sg.client.mail.send.post(request_body=message.get())
+    except urllib.HTTPError as e:
+        print(e.read())
+        exit()
+    return render_template('index.html')
 
 def build_sample_db():
     db.drop_all()
@@ -120,7 +135,7 @@ def build_sample_db():
     user_datastore.create_user(email=app.config['USER_EMAIL'], password=app.config['USER_PASS'])
     db.session.commit()
 
-
+@app.route("/draw")
 def draw():
     # get all members and pick a person
     members = Member.query.all()
@@ -138,9 +153,17 @@ def draw():
             member.pick = random.choice(case)
 
             picked.append(member.pick)
-            print(member.email, ' -> ', member.pick.email)
         except IndexError:
             draw()
+
+    for model in members:
+        print(model.email, ' -> ', model.pick.email)
+        content = Content("text/html", render_template('email/draw.html', member=model))
+        message = Mail(Email('kamil@szewczyk.org', 'Kamil Szewczyk'), 'Wyniki losowania 2016', Email(model.email, model.name), content)
+        message.set_template_id(app.config['SENDGRID_TEMPLATE_ID'])
+        response = sg.client.mail.send.post(request_body=message.get())
+
+    return render_template('index.html')
 
 if __name__ == "__main__":
     # Build a sample db on the fly, if one does not exist yet.
@@ -149,5 +172,5 @@ if __name__ == "__main__":
     if not os.path.exists(database_path):
         build_sample_db()
 
-    # app.debug = True
+    #app.debug = True
     app.run()
