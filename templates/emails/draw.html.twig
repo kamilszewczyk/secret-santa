@@ -1,0 +1,25 @@
+{% apply inline_css(source('@css/app.css')) %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="header">
+    <img src="{{ email.image('@images/top-header.gif') }}"  alt="Header"/>
+</div>
+<div class="container">
+    <img src="{{ email.image('@images/top-snow.png') }}"  alt="Top snow"/>
+    <h1>Cześć {{member}}!</h1>
+    <p>Osoba której podarujesz w tym roku prezent to: <strong>{{receiver}}</strong>.</p>
+    <p>Miłej zabawy i do zobaczenia w Święta!</p>
+    <br />
+    <p>Pamiętaj, by przy zakupie nie przekraczać limitu {{price_limit}} zł, chyba że uznasz to za konieczne - licz się jednak z tym, że Twój Mikołaj nie musi uznać tak samo.</p>
+    <img src="{{ email.image('@images/footer-top-snow.png') }}"  alt="Footer snow"/>
+</div>
+<div class="footer">
+    <img src="{{ email.image('@images/footer-bottom-snow.png') }}"  alt="Footer"/>
+</div>
+</body>
+</html>
+{% endapply %}

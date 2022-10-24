@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Liskowe prezenty {{ 'now' | date('Y') }}{% endblock %}</title>
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet"/>
+    </head>
+    <body>
+        <header>
+            <img src="{{ asset('images/top-header.gif') }}"  alt="Header"/>
+        </header>
+        <div>
+            <img src="{{ asset('images/top-snow.png') }}"  alt="Top snow"/>
+            {% block body %}{% endblock %}
+            <img src="{{ asset('images/footer-top-snow.png') }}"  alt="Footer snow"/>
+        </div>
+        <footer>
+            <img src="{{ asset('images/footer-bottom-snow.png') }}"  alt="Footer"/>
+        </footer>
+    </body>
+</html>
