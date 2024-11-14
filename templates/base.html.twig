@@ -4,17 +4,18 @@
         <meta charset="UTF-8">
         <title>{% block title %}Liskowe prezenty {{ 'now' | date('Y') }}{% endblock %}</title>
         <link href="{{ asset('css/app.css') }}" rel="stylesheet"/>
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
     </head>
     <body>
-        <header>
+        <header class="header">
             <img src="{{ asset('images/top-header.gif') }}"  alt="Header"/>
         </header>
-        <div>
+        <div class="container">
             <img src="{{ asset('images/top-snow.png') }}"  alt="Top snow"/>
             {% block body %}{% endblock %}
             <img src="{{ asset('images/footer-top-snow.png') }}"  alt="Footer snow"/>
         </div>
-        <footer>
+        <footer class="footer">
             <img src="{{ asset('images/footer-bottom-snow.png') }}"  alt="Footer"/>
         </footer>
     </body>

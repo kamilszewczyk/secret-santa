@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\MemberRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
 class Member
@@ -23,6 +25,12 @@ class Member
     private ?bool $active = null;
 
     private Member $receiver;
+
+    #[ORM\Column(type: 'uuid', nullable: true)]
+    private ?Uuid $uuid = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $wishlist = null;
 
     public function getId(): ?int
     {
@@ -75,5 +83,29 @@ class Member
     public function getReceiver(): Member
     {
         return $this->receiver;
+    }
+
+    public function getUuid(): ?Uuid
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(?Uuid $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function getWishlist(): ?string
+    {
+        return $this->wishlist;
+    }
+
+    public function setWishlist(?string $wishlist): self
+    {
+        $this->wishlist = $wishlist;
+
+        return $this;
     }
 }

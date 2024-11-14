@@ -11,10 +11,14 @@
 <div class="container">
     <img src="{{ email.image('@images/top-snow.png') }}"  alt="Top snow"/>
     <h1>Cześć {{member}}!</h1>
-    <p>Osoba której podarujesz w tym roku prezent to: <strong>{{receiver}}</strong>.</p>
+    <p>Osoba której podarujesz w tym roku prezent to: <strong><a href="{{ url('app_wishlist', {'name': 'test'}) }}">{{receiver}}</a></strong>.</p>
     <p>Miłej zabawy i do zobaczenia w Święta!</p>
     <br />
     <p>Pamiętaj, by przy zakupie nie przekraczać limitu {{price_limit}} zł, chyba że uznasz to za konieczne - licz się jednak z tym, że Twój Mikołaj nie musi uznać tak samo.</p>
+    <br />
+    <p style="font-size: small">Możesz kliknąć na imię osoby którą wylosowałeś, żeby zobaczyć jej listę życzeń. Lista może być aktualizowana dowolnie, więc zajrzyj tam kilka razy ;)</p>
+    <p style="font-size: small">Możesz edytować swoją listę życzeń klikając <a href="{{ url('app_wishlist_edit', {'uuid': 'test'}) }}">TUTAJ</a></p>
+
     <img src="{{ email.image('@images/footer-top-snow.png') }}"  alt="Footer snow"/>
 </div>
 <div class="footer">

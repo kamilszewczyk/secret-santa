@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Member;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Member>
@@ -23,6 +24,10 @@ class MemberRepository extends ServiceEntityRepository
 
     public function save(Member $entity, bool $flush = false): void
     {
+        if (!$entity->getUuid()) {
+            $entity->setUuid(Uuid::v4());
+        }
+
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {

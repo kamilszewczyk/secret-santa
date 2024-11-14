@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class MemberCrudController extends AbstractCrudController
@@ -22,7 +23,9 @@ class MemberCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             EmailField::new('email'),
             TextField::new('name'),
-            BooleanField::new('active')
+            BooleanField::new('active'),
+            TextField::new('uuid')->onlyOnForms()->setDisabled(),
+            TextEditorField::new('wishlist')->onlyOnForms(),
         ];
     }
 }

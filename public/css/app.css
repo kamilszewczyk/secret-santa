@@ -30,6 +30,10 @@ body {
     font-size: 14px;
     color: #7f8c8d;
     line-height: 28px; }
+  .container p a {
+    text-decoration: underline;
+    color:#7f8c8d;
+  }
 
 .footer {
   width: 600px;
