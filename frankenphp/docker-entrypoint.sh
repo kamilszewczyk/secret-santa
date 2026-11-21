@@ -53,8 +53,11 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		fi
 	fi
 
-	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
-	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
+	# Not fatal: mounted datasets without POSIX ACL support (e.g. TrueNAS NFSv4) reject setfacl,
+	# and the app runs as root so it can write to var/ anyway.
+	if ! { setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var && setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var; } 2>/dev/null; then
+		echo "Warning: could not set ACLs on var/ (filesystem without POSIX ACLs?), continuing"
+	fi
 fi
 
 exec docker-php-entrypoint "$@"
