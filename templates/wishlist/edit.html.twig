@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello WishlistController!{% endblock %}
+{% block title %}Moja lista życzeń{% endblock %}
 
 {% block body %}
+    <h1>Cześć {{ name }}! To Twoja lista życzeń</h1>
+    <p class="hint">Każdy pomysł wpisz w nowej linii. Linki (https://…) będą klikalne dla Twojego Mikołaja.</p>
 
-<div>
-    {{ form_start(form) }}
+    {% for message in app.flashes('success') %}
+        <p class="flash">{{ message }}</p>
+    {% endfor %}
+
+    {{ form_start(form, {attr: {class: 'wishlist-form'}}) }}
     {{ form_errors(form) }}
-
-    <div class="main-container">
-        <div class="editor-container editor-container_classic-editor" id="editor-container">
-            <div class="editor-container__editor">{{ form_row(form.wishlist) }}</div>
-        </div>
-    </div>
-
-    {{ form_row(form.save) }}
+    {{ form_widget(form.wishlist) }}
+    {{ form_widget(form.save) }}
     {{ form_end(form) }}
-</div>
+
+    <p class="hint"><a href="{{ path('app_wishlist', {name: name}) }}">Zobacz, jak widzą ją inni →</a></p>
 {% endblock %}

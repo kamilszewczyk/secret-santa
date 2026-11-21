@@ -25,7 +25,7 @@ class MailSender
             ->textTemplate('emails/draw.txt.twig')
             ->context([
                           'member' => $member->getName(),
-                          'uuid' => $member->getUuid(),
+                          'uuid' => $member->getUuid()?->toRfc4122(),
                           'receiver' => $recipient,
                           'price_limit' => $this->priceLimit
                       ]);

@@ -1,0 +1,35 @@
+# Standalone production stack for TrueNAS Scale: Apps > Discover Apps > ⋮ > Install via YAML.
+#
+# One-time setup on the NAS (adjust /mnt/tank/apps/secret-santa everywhere below):
+#   git clone <this repo> /mnt/tank/apps/secret-santa/src
+#   mkdir -p /mnt/tank/apps/secret-santa/db /mnt/tank/apps/secret-santa/log
+#   copy your var/data.db to /mnt/tank/apps/secret-santa/db/data.db
+# Update: git pull in src/, then redeploy the app (the image is rebuilt).
+#
+# The app serves plain HTTP on port 8080; point your reverse proxy at http://<nas-ip>:8080.
+# Run the draw from the NAS shell:
+#   docker exec -it $(docker ps -qf name=secret-santa) bin/console app:draw --dry-run
+name: secret-santa
+services:
+  php:
+    build:
+      context: /mnt/tank/apps/secret-santa/src
+      target: frankenphp_prod
+    image: secret-santa:local
+    pull_policy: build
+    restart: unless-stopped
+    environment:
+      SERVER_NAME: ":80" # plain HTTP, TLS is done by the reverse proxy
+      TRUSTED_PROXIES: 127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16 # proxy on LAN / docker network
+      DATABASE_URL: sqlite:////app/var/db/data.db
+      PRICE_LIMIT: 150 # zł, shown in the draw email
+      DEFAULT_URI: https://CHANGE_ME.example.com # public URL used in email links
+      APP_SECRET: CHANGE_ME # openssl rand -hex 16
+      MAILER_DSN: CHANGE_ME # e.g. smtp://user:pass@smtp.example.com:587
+      # bin/console security:hash-password ; write every $ as $$ (compose interpolation)
+      ADMIN_PASSWORD_HASH: CHANGE_ME
+    volumes:
+      - /mnt/tank/apps/secret-santa/db:/app/var/db
+      - /mnt/tank/apps/secret-santa/log:/app/var/log # draw.log = who drew whom
+    ports:
+      - "8080:80"

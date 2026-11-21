@@ -7,6 +7,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[AsCommand(
     name: 'app:test-email',
@@ -16,8 +17,7 @@ class TestEmailCommand extends Command
 {
 
     public function __construct(
-        private \App\Service\MailSender $mailSender,
-        private Member $member
+        private \App\Service\MailSender $mailSender
     ) {
 
 
@@ -26,9 +26,10 @@ class TestEmailCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $member = $this->member;
+        $member = new Member();
         $member->setEmail('kamil@szewczyk.org');
         $member->setName('Kamil');
+        $member->setUuid(Uuid::v4());
         $this->mailSender->execute($member, 'Gosia');
 
         return Command::SUCCESS;

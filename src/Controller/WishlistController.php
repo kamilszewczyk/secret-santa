@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Member;
 use Doctrine\Persistence\ManagerRegistry;
-use EasyCorp\Bundle\EasyAdminBundle\Form\Type\TextEditorType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -42,7 +41,11 @@ class WishlistController extends AbstractController
         }
 
         $form = $this->createFormBuilder($member)
-             ->add('wishlist', TextareaType::class, ['label' => 'Lista życzeń'])
+             ->add('wishlist', TextareaType::class, [
+                 'label' => false,
+                 'required' => false,
+                 'attr' => ['rows' => 14, 'placeholder' => "np.\nKsiążka „…”\nCiepłe skarpetki, rozmiar 42\nhttps://link-do-sklepu.pl/produkt"],
+             ])
              ->add('save', SubmitType::class, ['label' => 'Zapisz'])
              ->getForm();
 
@@ -51,12 +54,14 @@ class WishlistController extends AbstractController
             $member = $form->getData();
 
             $this->doctrine->getRepository(Member::class)->save($member, true);
+            $this->addFlash('success', 'Zapisano! 🎁');
 
             return $this->redirectToRoute('app_wishlist_edit', ['uuid' => $uuid]);
         }
 
         return $this->render('wishlist/edit.html.twig', [
             'form' => $form->createView(),
+            'name' => $member->getName(),
         ]);
     }
 }

@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[AsCommand(
     name: 'app:draw',
@@ -29,6 +30,12 @@ class DrawCommand extends Command
     {
         /** @var Member[] $members */
         $members = $this->doctrine->getRepository(Member::class)->findBy(['active' => true]);
+        foreach ($members as $member) { // Members added via admin have no uuid (needed for wishlist edit link)
+            if (!$member->getUuid()) {
+                $member->setUuid(Uuid::v4());
+            }
+        }
+        $this->doctrine->getManager()->flush();
         /** @var Member[] $picked */
         $picked = [];
 

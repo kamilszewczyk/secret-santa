@@ -1,3 +1,119 @@
+/* Web-only styles. public/css/app.css is shared with the emails, so overrides live here. */
 body {
-    background-color: skyblue;
+    background-color: #a64f4f;
+    font-family: 'Open Sans', Arial, sans-serif;
+    padding: 0 12px;
+}
+
+.header {
+    max-width: 620px;
+    width: auto;
+}
+
+/* Same width as .container so the snow edge lines up with the content box */
+.footer {
+    max-width: 600px;
+    width: auto;
+}
+
+.footer img {
+    width: 100%;
+}
+
+.header img,
+.footer img,
+.container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.header img {
+    margin: 0 auto;
+}
+
+.container {
+    box-sizing: border-box;
+    max-width: 600px;
+    width: auto;
+    padding: 24px 40px;
+}
+
+.container h1 {
+    margin: 16px 0 8px;
+    font-size: 22px;
+}
+
+.container .hint {
+    margin: 8px 0 16px;
+    line-height: 1.5;
+}
+
+.container .hint a {
+    color: #b7202f;
+}
+
+.wishlist {
+    text-align: left;
+    margin: 16px 0;
+    padding: 16px 20px;
+    background: #fdf6f6;
+    border-left: 4px solid #b7202f;
+    border-radius: 4px;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.wishlist a {
+    color: #b7202f;
+}
+
+.wishlist-form textarea {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    min-height: 320px;
+    padding: 12px 14px;
+    border: 1px solid #d9b8b8;
+    border-radius: 4px;
+    font: 16px/1.6 'Open Sans', Arial, sans-serif;
+    color: #333;
+    resize: vertical;
+}
+
+.wishlist-form textarea:focus {
+    outline: 2px solid #b7202f;
+    border-color: transparent;
+}
+
+.wishlist-form button {
+    margin: 16px auto 0;
+    padding: 10px 32px;
+    border: 0;
+    border-radius: 4px;
+    background: #b7202f;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.wishlist-form button:hover {
+    background: #8d1824;
+}
+
+.flash {
+    margin: 0 0 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background: #e3f4e6;
+    color: #1d6b2c;
+}
+
+@media (max-width: 520px) {
+    .container {
+        padding: 16px;
+    }
 }
